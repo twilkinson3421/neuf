@@ -5,6 +5,12 @@ export type * from "../dev/router.types.ts";
 
 import { List } from "@exts/list";
 
+/**
+ * A function which takes a request and returns a `PathData` object.
+ * @param req The request object.
+ * @param opts Configuration options for the router.
+ * @returns A promise which resolves to a `PathData` object.
+ */
 export async function router(req: Request, opts: R.RouterOptions): Promise<R.PathData> {
     const pathname = new URL(req.url).pathname;
     const segments = new List(...pathname.split("/").filter(Boolean).concat("<FILE>"));

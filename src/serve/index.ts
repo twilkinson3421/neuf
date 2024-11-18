@@ -7,6 +7,13 @@ export type * from "../dev/serve.types.ts";
 import { serveDir } from "@std/http/file-server";
 import { deepMerge, type DeepMergeOptions } from "@cross/deepmerge";
 
+/**
+ * Serves a request.
+ * @param req The request object.
+ * @param res The response object.
+ * @param opts Configuration options for serving a Neuf application.
+ * @returns A promise which resolves to a response.
+ */
 export async function serve(req: Request, res: Response, opts: S.ServeOptions): Promise<Response> {
     const pathname = new URL(req.url).pathname;
 

@@ -2,6 +2,10 @@ import * as sys from "../dev/runtime.ts";
 import type * as H from "../dev/host.types.ts";
 export type * from "../dev/host.types.ts";
 
+/**
+ * Starts a server listening at the specified address and port.
+ * @param opts Configuration options for the server.
+ */
 export function host(opts: H.HostOptions): void {
     let $req: Request;
     const res = new Response();

@@ -3,6 +3,11 @@ import { render as JSXRender } from "preact-render-to-string";
 
 import type { Metadata } from "../dev/lib.types.ts";
 
+/**
+ * Resolves metadata to a string.
+ * @param data Metadata to resolve.
+ * @returns A string containing the resolved metadata to be used in the head element.
+ */
 export function resolveMetadata(data: Metadata): string {
     const d = data;
     const els: Array<preact.JSX.Element | undefined> = <const>[

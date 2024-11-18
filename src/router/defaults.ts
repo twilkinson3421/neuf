@@ -1,5 +1,6 @@
 import type * as R from "../dev/router.types.ts";
 
+/** Default configuration options for the router. */
 export const defaultRouterOptions: R.RouterOptions = {
     fsRoot: "src/app",
     patterns: {
