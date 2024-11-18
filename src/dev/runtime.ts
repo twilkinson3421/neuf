@@ -58,7 +58,7 @@ export function serverListen(
 export async function relDynImport(path: string): Promise<any> {
     try {
         const fileDir = dirname(fromFileUrl(import.meta.url));
-        return await import(relative(fileDir.slice(Deno.cwd().length + 1), path));
+        return await import(`${relative(fileDir, Deno.cwd())}/${path}`);
     } catch (_error) {
         return undefined;
     }
