@@ -28,3 +28,6 @@ export * as Router from "./src/router/index.ts";
 export * as RouterDefaults from "./src/router/defaults.ts";
 export * as Serve from "./src/serve/index.ts";
 export * as Types from "./src/dev/lib.types.ts";
+
+export * from "./src/libutils/metadata.ts";
+export * from "./src/libutils/script.el.ts";

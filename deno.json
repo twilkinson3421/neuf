@@ -1,6 +1,6 @@
 {
     "name": "@neuf/neuf",
-    "version": "0.9.1",
+    "version": "0.9.2",
     "license": "MIT",
 
     "exports": {
@@ -10,7 +10,9 @@
         "./host": "./src/host/index.ts",
         "./router": "./src/router/index.ts",
         "./router/defaults": "./src/router/defaults.ts",
-        "./serve": "./src/serve/index.ts"
+        "./serve": "./src/serve/index.ts",
+        "./metadata": "./src/libutils/metadata.ts",
+        "./script": "./src/libutils/script.el.ts"
     },
 
     "imports": {
