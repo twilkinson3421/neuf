@@ -4,6 +4,8 @@ import type * as N from "../dev/lib.types.ts";
 import type * as R from "../dev/router.types.ts";
 import type * as S from "../dev/serve.types.ts";
 
+import { NeufControl } from "../dev/control.ts";
+
 export async function getMiddlewares(importFn: S.ImportFn, path: string): Promise<N.Middleware[]> {
     return Object.values((await sys.tryDynamicImport(importFn, path)) ?? {});
 }
@@ -38,20 +40,21 @@ async function importRouteHandler(
 }
 
 export async function getStaticImports(
-    importFn: S.ImportFn,
     pathData: R.PathData,
-    isError: boolean
+    opts: S.ServeOptions
 ): Promise<S.StaticImports> {
     return <const>[
-        await importDocument(importFn, pathData.paths.document),
-        await importLayouts(importFn, pathData.paths.layouts),
+        await importDocument(opts.importFn, pathData.paths.document),
+        await importLayouts(opts.importFn, pathData.paths.layouts),
         await importPage(
-            importFn,
-            isError
+            opts.importFn,
+            opts.isError
                 ? pathData.paths.page.error
+                : opts.isNotFound
+                ? pathData.paths.page.notFound
                 : pathData.paths.page.default ?? pathData.paths.page.notFound
         ),
-        await importRouteHandler(importFn, pathData.paths.routeHandler),
+        await importRouteHandler(opts.importFn, pathData.paths.routeHandler),
     ];
 }
 
@@ -61,4 +64,8 @@ export function validateRouteHandlerMethod(method: string): method is N.ValidRou
 
 export function initLayouts(): S.LayoutObject[] {
     return [];
+}
+
+export function isNotFound(result: N.PossibleNeufResponse): boolean {
+    return result === NeufControl.NotFound;
 }

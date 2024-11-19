@@ -23,6 +23,7 @@ export async function serve(req: Request, res: Response, opts: S.ServeOptions): 
         if (middleware.options?.matcher && !middleware.options.matcher.test(pathname)) continue;
         const result = await middleware.handler(req, res);
         if (result instanceof Response) return result;
+        if (h.isNotFound(result)) return serve(req, res, { ...opts, isNotFound: true });
     }
 
     const staticResponse = await serveDir(req, opts.serveStaticOptions);
@@ -31,7 +32,7 @@ export async function serve(req: Request, res: Response, opts: S.ServeOptions): 
     const pathData = await opts.router(req);
     const { params, searchParams } = pathData.url;
     const baseCtx: N.BaseCtx = { req, res, pathname, params, searchParams };
-    const staticImports = await h.getStaticImports(opts.importFn, pathData, opts.isError);
+    const staticImports = await h.getStaticImports(pathData, opts);
     const [DocumentFn, LayoutClasses, PageClass, RouteHandler] = staticImports;
 
     if (RouteHandler && h.validateRouteHandlerMethod(req.method)) {
@@ -57,6 +58,7 @@ export async function serve(req: Request, res: Response, opts: S.ServeOptions): 
         const staticLayoutCtx: N.StaticLayoutCtx = { ...baseCtx, upstream: previousUpstream };
         const middlewareResult = await LayoutClass.middleware?.(staticLayoutCtx);
         if (middlewareResult instanceof Response) return middlewareResult;
+        if (h.isNotFound(middlewareResult)) return serve(req, res, { ...opts, isNotFound: true });
         const upstream = (await LayoutClass.upstream?.(staticLayoutCtx)) ?? {};
         upstreamArr.push(deepMerge(previousUpstream, upstream));
     }
@@ -72,18 +74,21 @@ export async function serve(req: Request, res: Response, opts: S.ServeOptions): 
         await layoutInstance.init?.();
         const responseResult = await layoutInstance.response?.();
         if (responseResult instanceof Response) return responseResult;
+        if (h.isNotFound(responseResult)) return serve(req, res, { ...opts, isNotFound: true });
         const downstream = (await layoutInstance.downstream?.()) ?? {};
         const mergedDownstream = deepMerge(previousDownstream, downstream);
         layouts.push({ layout: layoutInstance, downstream: mergedDownstream });
     }
 
-    const pageCtx: N.PageCtx = { ...baseCtx, downstream: getPreviousDownstream() };
-    const middlewareResult = await PageClass.middleware?.(pageCtx);
+    const middlewareResult = await PageClass.middleware?.(staticPageCtx);
     if (middlewareResult instanceof Response) return middlewareResult;
+    if (h.isNotFound(middlewareResult)) return serve(req, res, { ...opts, isNotFound: true });
+    const pageCtx: N.PageCtx = { ...baseCtx, downstream: getPreviousDownstream() };
     const pageInstance = new PageClass(pageCtx);
     await pageInstance.init?.();
     const responseResult = await pageInstance.response?.();
     if (responseResult instanceof Response) return responseResult;
+    if (h.isNotFound(responseResult)) return serve(req, res, { ...opts, isNotFound: true });
     const pageRenderResult = await pageInstance.render();
     const pageMetadata = (await pageInstance.metadata?.()) ?? {};
     const [render, metadata] = <const>[pageRenderResult, pageMetadata];

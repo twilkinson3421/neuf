@@ -15,7 +15,6 @@
  * - Examples
  * - Control over when promises are resolved (e.g. no need to block for a network request which has no effect on the page render)
  * - First-party error handling
- * - Dedicated API route-handlers
  * - Dedicated solution for i18n, among other things
  *
  * @module
@@ -23,6 +22,7 @@
 
 export * as Constants from "./src/dev/constants.ts";
 export * as Decorators from "./src/decorators/lib.ts";
+export * as Control from "./src/dev/control.ts";
 export * as Host from "./src/host/index.ts";
 export * as Router from "./src/router/index.ts";
 export * as RouterDefaults from "./src/router/defaults.ts";

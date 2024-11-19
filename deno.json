@@ -1,18 +1,19 @@
 {
     "name": "@neuf/neuf",
-    "version": "0.9.8",
+    "version": "0.9.9",
     "license": "MIT",
 
     "exports": {
         ".": "./mod.ts",
+        "./control": "./src/dev/control.ts",
         "./decorators": "./src/decorators/lib.ts",
         "./globals": "./src/dev/global.ts",
         "./host": "./src/host/index.ts",
+        "./metadata": "./src/libutils/metadata.ts",
         "./router": "./src/router/index.ts",
         "./router/defaults": "./src/router/defaults.ts",
-        "./serve": "./src/serve/index.ts",
-        "./metadata": "./src/libutils/metadata.ts",
-        "./script": "./src/libutils/script.el.ts"
+        "./script": "./src/libutils/script.el.ts",
+        "./serve": "./src/serve/index.ts"
     },
 
     "imports": {

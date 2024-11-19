@@ -16,6 +16,8 @@ export type Serve = (req: Request, res: Response, isError: boolean) => Promise<R
 export interface ServeOptions {
     /** Whether the request should be handled as an error. */
     isError: boolean;
+    /** Whether the request should be handled as a 404. */
+    isNotFound: boolean;
     /** The path to the file where middleware might be defined; this file does not have to exist. */
     middleware: string;
     /** A function which takes a path (from cwd) and asynchronously imports the module at that path. */

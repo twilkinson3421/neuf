@@ -2,10 +2,14 @@ export * as Host from "./host.types.ts";
 export * as Router from "./router.types.ts";
 export * as Serve from "./serve.types.ts";
 
+import type { NeufControl } from "./control.ts";
 import type { VALID_ROUTE_HANDLER_METHODS } from "./constants.ts";
 
 /** A valid JSX element. */
 type JSXELement = preact.JSX.Element | null;
+
+/** A possible response in special Neuf functions, such as middleware. */
+export type PossibleNeufResponse = Response | NeufControl | void;
 
 /** A middleware object. */
 export interface Middleware {
@@ -14,9 +18,10 @@ export interface Middleware {
      * If anything but a response object is returned, the next middleware is invoked, if one exists.
      * @param req The request object.
      * @param res The response object.
-     * @returns Nothing, or a response which is immediately returned to the client. Can be async.
+     * @returns Nothing, a control code,
+     * or a response which is immediately returned to the client. Can be async.
      */
-    handler(req: Request, res: Response): Promise<Response | void> | Response | void;
+    handler(req: Request, res: Response): Promise<PossibleNeufResponse> | PossibleNeufResponse;
     /** Options for configuring this middleware. */
     options?: MiddlewareOptions;
 }
@@ -139,9 +144,9 @@ export interface Layout {
     /**
      * A method which can be used to return a custom HTTP response.
      * If anything but a response object is returned, nothing happens.
-     * @returns A response object, or nothing. Can be async.
+     * @returns A response object, control code, or nothing. Can be async.
      */
-    response?(): Promise<Response | void> | Response | void;
+    response?(): Promise<PossibleNeufResponse> | PossibleNeufResponse;
 }
 
 /** A static Neuf layout (class). */
@@ -162,9 +167,9 @@ export interface StaticLayout {
      * A method which can be used to return a custom HTTP response.
      * If anything but a response object is returned, nothing happens.
      * @param ctx The static layout context object.
-     * @returns A response object, or nothing. Can be async.
+     * @returns A response object, control code, or nothing. Can be async.
      */
-    middleware?(ctx: StaticLayoutCtx): Promise<Response | void> | Response | void;
+    middleware?(ctx: StaticLayoutCtx): Promise<PossibleNeufResponse> | PossibleNeufResponse;
 }
 
 /** A Neuf page. */
@@ -188,9 +193,9 @@ export interface Page {
     /**
      * A method which can be used to return a custom HTTP response.
      * If anything but a response object is returned, nothing happens.
-     * @returns A response object, or nothing. Can be async.
+     * @returns A response object, control code, or nothing. Can be async.
      */
-    response?(): Promise<Response | void> | Response | void;
+    response?(): Promise<PossibleNeufResponse> | PossibleNeufResponse;
 }
 
 /** A static Neuf page (class). */
@@ -211,9 +216,9 @@ export interface StaticPage {
      * A method which can be used to return a custom HTTP response.
      * If anything but a response object is returned, nothing happens.
      * @param ctx The static page context object.
-     * @returns A response object, or nothing. Can be async.
+     * @returns A response object, control code, or nothing. Can be async.
      */
-    middleware?(ctx: StaticPageCtx): Promise<Response | void> | Response | void;
+    middleware?(ctx: StaticPageCtx): Promise<PossibleNeufResponse> | PossibleNeufResponse;
     /**
      * A method which can be used to configure the behavior of the page.
      * @param ctx The static page context object.
@@ -234,7 +239,7 @@ export interface RouteHandlerCtx<P extends Params = Params> extends BaseCtx<P> {
 /** A primitive function which can be used to handle a request. */
 export type RouteHandler<P extends Params = Params> = (
     ctx: RouteHandlerCtx<P>
-) => Promise<Response | undefined> | Response | undefined;
+) => Promise<Response | void> | Response | void;
 
 /** A valid route handler request method. */
 export type ValidRouteHandlerMethod = (typeof VALID_ROUTE_HANDLER_METHODS)[number];
