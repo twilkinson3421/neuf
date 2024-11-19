@@ -4,8 +4,9 @@ import type * as N from "../dev/lib.types.ts";
 import type * as S from "../dev/serve.types.ts";
 export type * from "../dev/serve.types.ts";
 
-import { serveDir } from "@std/http/file-server";
 import { deepMerge, type DeepMergeOptions } from "@cross/deepmerge";
+import { METHOD } from "@std/http/unstable-method";
+import { serveDir } from "@std/http/file-server";
 
 /**
  * Serves a request.
@@ -28,12 +29,21 @@ export async function serve(req: Request, res: Response, opts: S.ServeOptions): 
     if (h.shouldReturnStatic(pathname, staticResponse)) return staticResponse;
 
     const pathData = await opts.router(req);
-    const staticImports = await h.getStaticImports(opts.importFn, pathData, opts.isError);
-    const [DocumentFn, LayoutClasses, PageClass] = staticImports;
-    if (!PageClass) return opts.isError ? c.ERROR_RESPONSE : c.NOT_FOUND_RESPONSE;
-
     const { params, searchParams } = pathData.url;
     const baseCtx: N.BaseCtx = { req, res, pathname, params, searchParams };
+    const staticImports = await h.getStaticImports(opts.importFn, pathData, opts.isError);
+    const [DocumentFn, LayoutClasses, PageClass, RouteHandler] = staticImports;
+
+    if (RouteHandler && h.validateRouteHandlerMethod(req.method)) {
+        const handler = RouteHandler[req.method];
+        if (handler) return (await handler(baseCtx)) ?? c.NO_CONTENT_RESPONSE;
+        if (req.method !== METHOD.Get) return c.METHOD_NOT_ALLOWED_RESPONSE;
+        if (!pathData.paths.page.default) return c.METHOD_NOT_ALLOWED_RESPONSE;
+    }
+
+    if (req.method !== METHOD.Get) return c.METHOD_NOT_ALLOWED_RESPONSE;
+    if (!PageClass) return opts.isError ? c.ERROR_RESPONSE : c.NOT_FOUND_RESPONSE;
+
     const staticPageCtx: N.StaticPageCtx = baseCtx;
     const pageOptions = await PageClass.options?.(staticPageCtx);
     if (pageOptions?.ignoreLayout) LayoutClasses.length = 0;

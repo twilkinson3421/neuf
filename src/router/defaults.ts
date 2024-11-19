@@ -11,6 +11,7 @@ export const defaultRouterOptions: R.RouterOptions = {
             notFound: /^[A-Za-z0-9]+\.page\.not-found\.(js|ts|jsx|tsx)$/,
             error: /^[A-Za-z0-9]+\.page\.error\.(js|ts|jsx|tsx)$/,
         },
+        routeHandler: /^[A-Za-z0-9]+\.route\.(js|ts|jsx|tsx)$/,
         dir: {
             dynamic: {
                 pattern: /^\[[^\]^\.]*\]$/,

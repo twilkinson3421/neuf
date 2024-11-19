@@ -32,7 +32,12 @@ export interface ServeOptions {
     };
 }
 
-export type StaticImports = readonly [N.DocumentFn, N.StaticLayout[], N.StaticPage | undefined];
+export type StaticImports = readonly [
+    N.DocumentFn,
+    N.StaticLayout[],
+    N.StaticPage | undefined,
+    N.RouteHandlerModule | undefined
+];
 
 /** A function used to generate the HTML string for the head element from metadata. */
 export type HeadFn = (metadata: N.Metadata) => Promise<string> | string;

@@ -17,6 +17,8 @@ export interface RouterOptions {
             /** A regular expression used to match a Neuf 'Error' page file. */
             error: RegExp;
         };
+        /** A regular expression used to match a route handler file. */
+        routeHandler: RegExp;
         dir: {
             dynamic: RegexAndName;
             catchAll: RegexAndName;
@@ -61,6 +63,11 @@ export interface PathData {
             /** The file path to the nearest 'Error' page file, if one exists. */
             error: string | undefined;
         };
+        /**
+         * The file path to the requested route handler, if it exists.
+         * Takes precedence over `page.default`.
+         */
+        routeHandler: string | undefined;
     };
     url: {
         /** Dynamic URL Params from the request URL. */
@@ -81,4 +88,5 @@ export interface StaticPaths {
         notFound: string | undefined;
         error: string | undefined;
     };
+    routeHandler: string | undefined;
 }

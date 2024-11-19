@@ -1,6 +1,8 @@
 import * as sys from "../dev/runtime.ts";
 import type * as R from "../dev/router.types.ts";
 
+import { join } from "@std/path";
+
 export function initPathData(req: Request, runtimeRoot: string): R.PathData {
     return {
         paths: {
@@ -12,6 +14,7 @@ export function initPathData(req: Request, runtimeRoot: string): R.PathData {
                 notFound: undefined,
                 error: undefined,
             },
+            routeHandler: undefined,
         },
         url: {
             params: {},
@@ -21,7 +24,7 @@ export function initPathData(req: Request, runtimeRoot: string): R.PathData {
 }
 
 export function joinerFactory(base: string): (str: string) => string {
-    return (str: string) => `${base}/${str}`;
+    return (str: string) => join(base, str);
 }
 
 async function getFile(dir: string, r: RegExp): Promise<string | undefined> {
@@ -40,6 +43,7 @@ export async function getStaticPaths(
             notFound: await getFile(dir, patterns.page.notFound),
             error: await getFile(dir, patterns.page.error),
         },
+        routeHandler: await getFile(dir, patterns.routeHandler),
     };
 }
 

@@ -29,6 +29,14 @@ async function importPage(importFn: S.ImportFn, path?: string): Promise<N.Static
     return <N.StaticPage>(await sys.tryDynamicImport(importFn, path)).default;
 }
 
+async function importRouteHandler(
+    importFn: S.ImportFn,
+    path?: string
+): Promise<N.RouteHandlerModule | undefined> {
+    if (!path) return undefined;
+    return <N.RouteHandlerModule>await sys.tryDynamicImport(importFn, path);
+}
+
 export async function getStaticImports(
     importFn: S.ImportFn,
     pathData: R.PathData,
@@ -43,7 +51,12 @@ export async function getStaticImports(
                 ? pathData.paths.page.error
                 : pathData.paths.page.default ?? pathData.paths.page.notFound
         ),
+        await importRouteHandler(importFn, pathData.paths.routeHandler),
     ];
+}
+
+export function validateRouteHandlerMethod(method: string): method is N.ValidRouteHandlerMethod {
+    return c.VALID_ROUTE_HANDLER_METHODS.some(m => m === method);
 }
 
 export function initLayouts(): S.LayoutObject[] {

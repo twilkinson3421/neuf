@@ -34,6 +34,7 @@ async function getPathData(
         if (s.page.error) data.paths.page.error = join(s.page.error);
 
         if (seg.isLast && s.page.default) data.paths.page.default = join(s.page.default);
+        if (seg.isLast && s.routeHandler) data.paths.routeHandler = join(s.routeHandler);
         if (seg.isLast) return data;
 
         if (await sys.dirExists(join(seg.value))) {

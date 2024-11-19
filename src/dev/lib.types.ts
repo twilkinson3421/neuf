@@ -2,6 +2,8 @@ export * as Host from "./host.types.ts";
 export * as Router from "./router.types.ts";
 export * as Serve from "./serve.types.ts";
 
+import type { VALID_ROUTE_HANDLER_METHODS } from "./constants.ts";
+
 /** A valid JSX element. */
 type JSXELement = preact.JSX.Element | null;
 
@@ -225,3 +227,16 @@ export interface PageOptions {
     /** Don't inherit layouts. */
     ignoreLayout?: boolean;
 }
+
+/** A context object passed to a route handler. */
+export interface RouteHandlerCtx<P extends Params = Params> extends BaseCtx<P> {}
+
+/** A primitive function which can be used to handle a request. */
+export type RouteHandler<P extends Params = Params> = (
+    ctx: RouteHandlerCtx<P>
+) => Promise<Response | undefined> | Response | undefined;
+
+/** A valid route handler request method. */
+export type ValidRouteHandlerMethod = (typeof VALID_ROUTE_HANDLER_METHODS)[number];
+
+export type RouteHandlerModule = Partial<Record<ValidRouteHandlerMethod, RouteHandler>>;
