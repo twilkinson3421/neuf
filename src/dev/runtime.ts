@@ -59,7 +59,7 @@ export async function relDynImport(path: string): Promise<any> {
     try {
         const fileDir = dirname(fromFileUrl(import.meta.url));
         const relativePath = `${relative(fileDir, Deno.cwd())}/${path}`;
-        if (Deno.env.get("NEUF_IMPORT_DEBUG")) console.log(fileDir, Deno.cwd(), path, relativePath);
+        console.log(fileDir, Deno.cwd(), path, relativePath);
         return await import(relativePath);
     } catch (_error) {
         return undefined;
