@@ -18,6 +18,8 @@ export interface ServeOptions {
     isError: boolean;
     /** The path to the file where middleware might be defined; this file does not have to exist. */
     middleware: string;
+    /** A function which takes a path (from cwd) and asynchronously imports the module at that path. */
+    importFn: ImportFn;
     /** A function which takes a request and returns a `PathData` object. */
     router: R.Router;
     /** Options for serving static files. */
@@ -42,3 +44,6 @@ export interface LayoutObject {
     layout: N.Layout;
     downstream: N.Downstream;
 }
+
+// deno-lint-ignore no-explicit-any
+export type ImportFn = (path: string) => Promise<any>;

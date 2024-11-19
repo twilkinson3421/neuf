@@ -17,7 +17,7 @@ import { deepMerge, type DeepMergeOptions } from "@cross/deepmerge";
 export async function serve(req: Request, res: Response, opts: S.ServeOptions): Promise<Response> {
     const pathname = new URL(req.url).pathname;
 
-    const middlewares = await h.getMiddlewares(opts.middleware);
+    const middlewares = await h.getMiddlewares(opts.importFn, opts.middleware);
     for (const middleware of middlewares) {
         if (middleware.options?.matcher && !middleware.options.matcher.test(pathname)) continue;
         const result = await middleware.handler(req, res);
@@ -28,7 +28,8 @@ export async function serve(req: Request, res: Response, opts: S.ServeOptions): 
     if (h.shouldReturnStatic(pathname, staticResponse)) return staticResponse;
 
     const pathData = await opts.router(req);
-    const [DocumentFn, LayoutClasses, PageClass] = await h.getStaticImports(pathData, opts.isError);
+    const staticImports = await h.getStaticImports(opts.importFn, pathData, opts.isError);
+    const [DocumentFn, LayoutClasses, PageClass] = staticImports;
     if (!PageClass) return opts.isError ? c.ERROR_RESPONSE : c.NOT_FOUND_RESPONSE;
 
     const { params, searchParams } = pathData.url;

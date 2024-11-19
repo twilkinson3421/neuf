@@ -1,4 +1,4 @@
-import { dirname, fromFileUrl, relative } from "@std/path";
+import type * as S from "./serve.types.ts";
 
 /**
  * Reads the contents of a directory.
@@ -49,20 +49,18 @@ export function serverListen(
 }
 
 /**
- * Performs a dynamic import of a module, relative to the current file path.
+ * Attempt to dynamically import a module at a given path.
+ * @param importFn The import function to use.
  * @param path The path to the module to import.
- * @returns A promise containing the module, or undefined if the module does not exist.
- * The type of the module should be explicitly specified.
+ * @returns A promise which resolves to the imported module, or `undefined` if the import failed.
  */
-// deno-lint-ignore no-explicit-any
-export async function relDynImport(path: string): Promise<any> {
+export async function tryDynamicImport(
+    importFn: S.ImportFn,
+    path: string
+): Promise<ReturnType<S.ImportFn> | undefined> {
     try {
-        const fileDir = dirname(fromFileUrl(import.meta.url));
-        const relativePath = `${relative(fileDir, Deno.cwd())}/${path}`;
-        console.log(fileDir, Deno.cwd(), path, relativePath);
-        return await import(relativePath);
+        return await importFn(path);
     } catch (_error) {
-        console.error(_error);
         return undefined;
     }
 }
