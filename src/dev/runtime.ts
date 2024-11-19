@@ -62,6 +62,7 @@ export async function relDynImport(path: string): Promise<any> {
         console.log(fileDir, Deno.cwd(), path, relativePath);
         return await import(relativePath);
     } catch (_error) {
+        console.error(_error);
         return undefined;
     }
 }
