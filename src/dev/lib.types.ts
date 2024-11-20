@@ -2,7 +2,7 @@ export * as Host from "./host.types.ts";
 export * as Router from "./router.types.ts";
 export * as Serve from "./serve.types.ts";
 
-import type { NeufControl } from "./control.ts";
+import type { NeufControl } from "../serve/control.ts";
 import type { VALID_ROUTE_HANDLER_METHODS } from "./constants.ts";
 
 /** A valid JSX element. */

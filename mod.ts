@@ -22,7 +22,7 @@
 
 export * as Constants from "./src/dev/constants.ts";
 export * as Decorators from "./src/decorators/lib.ts";
-export * as Control from "./src/dev/control.ts";
+export * as Control from "./src/serve/control.ts";
 export * as Host from "./src/host/index.ts";
 export * as Router from "./src/router/index.ts";
 export * as RouterDefaults from "./src/router/defaults.ts";

@@ -4,7 +4,7 @@ import type * as N from "../dev/lib.types.ts";
 import type * as R from "../dev/router.types.ts";
 import type * as S from "../dev/serve.types.ts";
 
-import { NeufControl } from "../dev/control.ts";
+import { NeufControl } from "./control.ts";
 
 export async function getMiddlewares(importFn: S.ImportFn, path: string): Promise<N.Middleware[]> {
     return Object.values((await sys.tryDynamicImport(importFn, path)) ?? {});
