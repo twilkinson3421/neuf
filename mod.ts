@@ -13,17 +13,17 @@
  * Coming soon:
  * - Better documentation!
  * - Examples
- * - Control over when promises are resolved (e.g. no need to block for a network request which has no effect on the page render)
- * - First-party error handling
+ * - 304 responses! ETags... (I have no idea how to use ETags! this will be interesting... anyone want to make a PR? :P)
  * - Dedicated solution for i18n, among other things
  *
  * @module
  */
 
 export * as Constants from "./src/dev/constants.ts";
-export * as Decorators from "./src/decorators/lib.ts";
 export * as Control from "./src/serve/control.ts";
+export * as Decorators from "./src/decorators/lib.ts";
 export * as Host from "./src/host/index.ts";
+export * as Log from "./src/dev/log.ts";
 export * as Router from "./src/router/index.ts";
 export * as RouterDefaults from "./src/router/defaults.ts";
 export * as Serve from "./src/serve/index.ts";

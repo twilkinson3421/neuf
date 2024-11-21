@@ -12,15 +12,12 @@ export interface HostOptions {
     serve: S.Serve;
 }
 
-/** A handler for HTTP requests.
- * @param request The request object.
- * @param info The request info object (Deno).
- * @returns A synchronous response or a promise which resolves to a response.
- */
+/** @alias Deno.ServeHandler<Deno.NetAddr> */
 export type Handler = Deno.ServeHandler<Deno.NetAddr>;
 export type Options = Deno.ServeTcpOptions;
-/** A version of the handler which is called when an uncaught error is thrown in the serve function.
- * @param error The error thrown.
- * @returns A promise which resolves to a response, or nothing. Can be async.
- */
+
+/** A version of the handler which is called when an uncaught error is thrown in the serve function. */
 export type ErrorHandler = Options["onError"];
+
+/** A function which is called when the server starts listening for requests. */
+export type ListenHandler = Options["onListen"];

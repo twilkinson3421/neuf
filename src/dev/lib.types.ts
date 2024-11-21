@@ -2,14 +2,14 @@ export * as Host from "./host.types.ts";
 export * as Router from "./router.types.ts";
 export * as Serve from "./serve.types.ts";
 
-import type { NeufControl } from "../serve/control.ts";
+import type { Control } from "../serve/control.ts";
 import type { VALID_ROUTE_HANDLER_METHODS } from "./constants.ts";
 
 /** A valid JSX element. */
 type JSXELement = preact.JSX.Element | null;
 
 /** A possible response in special Neuf functions, such as middleware. */
-export type PossibleNeufResponse = Response | NeufControl | void;
+export type PossibleNeufResponse = Response | Control | void;
 
 /** A middleware object. */
 export interface Middleware {
@@ -18,10 +18,9 @@ export interface Middleware {
      * If anything but a response object is returned, the next middleware is invoked, if one exists.
      * @param req The request object.
      * @param res The response object.
-     * @returns Nothing, a control code,
-     * or a response which is immediately returned to the client. Can be async.
+     * @returns Nothing, or a response which is immediately returned to the client. Can be async.
      */
-    handler(req: Request, res: Response): Promise<PossibleNeufResponse> | PossibleNeufResponse;
+    handler(req: Request, res: Response): Promise<Response | void> | Response | void;
     /** Options for configuring this middleware. */
     options?: MiddlewareOptions;
 }

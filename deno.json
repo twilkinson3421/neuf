@@ -9,6 +9,7 @@
         "./decorators": "./src/decorators/lib.ts",
         "./globals": "./src/dev/global.ts",
         "./host": "./src/host/index.ts",
+        "./log": "./src/dev/log.ts",
         "./metadata": "./src/libutils/metadata.ts",
         "./router": "./src/router/index.ts",
         "./router/defaults": "./src/router/defaults.ts",
@@ -19,6 +20,7 @@
     "imports": {
         "@cross/deepmerge": "jsr:@cross/deepmerge@^1.0.0",
         "@exts/list": "jsr:@exts/list@^0.3.5",
+        "@hikyu/colors": "jsr:@hikyu/colors@^0.1.20",
         "@std/http": "jsr:@std/http@^1.0.10",
         "@std/path": "jsr:@std/path@^1.0.8",
         "preact-render-to-string": "npm:preact-render-to-string@^6.5.11",

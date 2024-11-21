@@ -4,7 +4,7 @@ import type * as N from "../dev/lib.types.ts";
 import type * as R from "../dev/router.types.ts";
 import type * as S from "../dev/serve.types.ts";
 
-import { NeufControl } from "./control.ts";
+import { Control } from "./control.ts";
 
 export async function getMiddlewares(importFn: S.ImportFn, path: string): Promise<N.Middleware[]> {
     return Object.values((await sys.tryDynamicImport(importFn, path)) ?? {});
@@ -66,6 +66,10 @@ export function initLayouts(): S.LayoutObject[] {
     return [];
 }
 
+export function isRes(res: unknown): res is Response {
+    return res instanceof Response;
+}
+
 export function isNotFound(result: N.PossibleNeufResponse): boolean {
-    return result === NeufControl.NotFound;
+    return result === Control.NotFound;
 }
