@@ -1,0 +1,46 @@
+{
+    "name": "@neuf/neuf",
+    "version": "0.9.20",
+    "license": "MIT",
+
+    "exports": {
+        ".": "./mod.ts",
+        "./control-codes": "./src/features/control-codes.ts",
+        "./listen": "./src/listen/index.ts",
+        "./log": "./src/lib/log.ts",
+        "./router": "./src/router/index.ts",
+        "./serve": "./src/serve/index.ts",
+        "./types": "./src/lib/types.ts"
+    },
+
+    "imports": {
+        "@cross/deepmerge": "jsr:@cross/deepmerge@^1.0.0",
+        "@exts/list": "jsr:@exts/list@^0.3.5",
+        "@hikyu/colors": "jsr:@hikyu/colors@^0.1.20",
+        "@std/http": "jsr:@std/http@^1.0.11",
+        "@std/media-types": "jsr:@std/media-types@^1.1.0",
+        "@std/path": "jsr:@std/path@^1.0.8",
+        "preact": "npm:preact@^10.25.0",
+        "preact-render-to-string": "npm:preact-render-to-string@^6.5.11"
+    },
+    "lint": {
+        "rules": {
+            "include": [
+                "camelcase",
+                "default-param-last",
+                "eqeqeq",
+                "explicit-module-boundary-types",
+                "guard-for-in",
+                "no-boolean-literal-for-arguments",
+                "no-eval",
+                "no-inferrable-types",
+                "no-sparse-arrays",
+                "no-sync-fn-in-async-fn",
+                "no-throw-literal",
+                "single-var-declarator",
+                "triple-slash-reference",
+                "verbatim-module-syntax"
+            ]
+        }
+    }
+}
