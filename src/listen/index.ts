@@ -35,7 +35,7 @@
  */
 
 import { HEADER } from "@std/http/unstable-header";
-import { INFO_CODE, log } from "../lib/log.ts";
+import { INFO_CODE, Log } from "../lib/log.ts";
 
 export interface ListenOptions {
     hostname: string;
@@ -58,7 +58,7 @@ export function listen(opts: ListenOptions): void {
         response.headers.set(HEADER.Date, new Date(responseStartTime).toUTCString());
         const IS_ERROR = <const>false;
         const handlerResponse = await opts.handler(memReq(req), response, IS_ERROR);
-        log.response(request, response.status, responseStartTime);
+        Log.response(request, response.status, responseStartTime);
         return handlerResponse;
     };
 
@@ -66,13 +66,13 @@ export function listen(opts: ListenOptions): void {
         console.error(err instanceof Error ? err.stack : err);
         const IS_ERROR = <const>true;
         const handlerResponse = await opts.handler(request, response, IS_ERROR);
-        log.response(request, response.status, responseStartTime);
+        Log.response(request, response.status, responseStartTime);
         return handlerResponse;
     };
 
     const onListen: ListenHandler = addr => {
         const loc = `${addr.hostname}:${addr.port} (${addr.transport})`;
-        log.info(INFO_CODE.ServerListening, loc);
+        Log.info(INFO_CODE.ServerListening, loc);
     };
 
     const tcpOpts: Deno.ServeTcpOptions = {};

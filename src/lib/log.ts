@@ -20,21 +20,21 @@ function statusColor(status: number): string {
     return status.toString();
 }
 
-export const log = <const>{
-    response(req: Request, status: number, startTime: number): void {
+export class Log {
+    static response(req: Request, status: number, startTime: number): void {
         const duration = `(${Date.now() - startTime}ms)`;
         const cMethod = Colors.blue(req.method);
         const cStatus = statusColor(status);
         const path = new URL(req.url).pathname;
         console.info(`${timestamp()} ${duration} ${cMethod} ${cStatus} ${path}`);
-    },
+    }
 
-    info(code: InfoCode, msg?: string): void {
+    static info(code: InfoCode, msg?: string): void {
         const info = Colors.blue(`I${code} ${INFO_TEXT[code]}`);
         if (msg) console.info(`${timestamp()} ${info} ${msg}`);
         else console.info(`${timestamp()} ${info}`);
-    },
-};
+    }
+}
 
 export const INFO_CODE = <const>{
     ServerListening: 600,
