@@ -1,3 +1,9 @@
+/**
+ * Logging utilities for Neuf. Should only be used for extending the functionality of Neuf.
+ *
+ * @module
+ */
+
 import * as Colors from "@hikyu/colors";
 import * as Status from "@std/http/status";
 

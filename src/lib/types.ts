@@ -1,3 +1,9 @@
+/**
+ * Provides types for building a Neuf application.
+ *
+ * @module
+ */
+
 import type { ControlCode } from "../features/control-codes.ts";
 import type { JSX } from "preact";
 import type { Method } from "@std/http/unstable-method";

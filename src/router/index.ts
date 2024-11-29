@@ -1,6 +1,15 @@
+/**
+ * Provides the {@linkcode router} function for routing requests to a Neuf application.
+ * Provide a {@linkcode RouterOptions} object to configure the router behaviour.
+ *
+ * @module
+ */
+
 import { List } from "@exts/list";
 import * as h from "./helpers.ts";
 import * as sys from "../dev/runtime.ts";
+
+export * from "./defaults.ts";
 
 export interface RouterOptions {
     fsRoot: string;

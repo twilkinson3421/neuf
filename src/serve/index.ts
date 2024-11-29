@@ -1,3 +1,10 @@
+/**
+ * Provides the {@linkcode serve} function for generating a response in a Neuf application.
+ * Provide a {@linkcode ServeOptions} object to configure the behaviour.
+ *
+ * @module
+ */
+
 import { contentType } from "@std/media-types/content-type";
 import { CONTROL_CODE } from "../features/control-codes.ts";
 import { deepMerge, type DeepMergeOptions } from "@cross/deepmerge";

@@ -1,3 +1,39 @@
+/**
+ * Contains the {@linkcode listen} function which starts a server.
+ * Provide a {@linkcode ListenOptions} object to configure the server.
+ *
+ * @example
+ * ```ts
+ * import { listen, serve, router, ROUTER_DEFAULTS, type Lib } from "@neuf/neuf;
+ * import { relative, join } from "@std/join";
+ * import { render } from "preact-render-to-string";
+ *
+ * const importFn: Lib.ServeOptions["importFn"] = async path => {
+ *     const thisModuleDir = import.meta.dirname!;
+ *     const toCwd = relative(thisModuleDir, Deno.cwd());
+ *     const fullPath = join(toCwd, path);
+ *     return await import(fullPath);
+ * };
+ *
+ * listen({
+ *     hostname: "0.0.0.0",
+ *     port: 8080,
+ *     handler: (req, res, isError) => {
+ *         return serve(req, res, {
+ *             isError,
+ *             isNotFound: false,
+ *             staticOptions: { fsRoot: "src/public", quiet: true },
+ *             importFn,
+ *             router: $req => router($req, ROUTER_DEFAULTS),
+ *             renderJSX: render,
+ *         });
+ *     },
+ * });
+ * ```
+ *
+ * @module
+ */
+
 import { HEADER } from "@std/http/unstable-header";
 import { INFO_CODE, log } from "../lib/log.ts";
 
