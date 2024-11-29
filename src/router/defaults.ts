@@ -1,6 +1,6 @@
 import type { RouterOptions } from "./index.ts";
 
-export const ROUTER_DEFAULTS = (<const>{
+export const ROUTER_DEFAULTS: RouterOptions = <const>{
     fsRoot: "src/app",
     patterns: {
         document: /^[A-Za-z0-9]+\.document\.(js|ts|jsx|tsx)$/,
@@ -25,4 +25,4 @@ export const ROUTER_DEFAULTS = (<const>{
             group: /^\([^\)]*\)$/,
         },
     },
-}) satisfies RouterOptions;
+};
