@@ -6,7 +6,7 @@
  * Basic usage
  * @example
  * ```ts
- * import { listen, serve, router, ROUTER_DEFAULTS, type Lib } from "@neuf/neuf;
+ * import { listen, serve, router, ROUTER_DEFAULTS, type Lib } from "@neuf/neuf";
  * import { relative, join } from "@std/join";
  * import { render } from "preact-render-to-string";
  *
