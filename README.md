@@ -5,11 +5,11 @@ A simple barebones SSR web framework for Deno. Uses preact JSX for templating. S
 ## Basic Usage
 
 ```ts
-import { listen, serve, router, type Lib } from "@neuf/neuf";
+import { listen, serve, router, type ServeOptions } from "@neuf/neuf";
 import { relative, join } from "@std/join";
 import { render } from "preact-render-to-string";
 
-const importFn: Lib.ServeOptions["importFn"] = async path => {
+const importFn: ServeOptions["importFn"] = async path => {
     const thisModuleDir = import.meta.dirname!;
     const toCwd = relative(thisModuleDir, Deno.cwd());
     const fullPath = join(toCwd, path);
