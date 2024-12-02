@@ -6,6 +6,7 @@
  */
 
 import { List } from "@exts/list";
+import { ROUTER_DEFAULTS } from "./defaults.ts";
 import * as h from "./helpers.ts";
 import * as sys from "../dev/runtime.ts";
 
@@ -46,7 +47,10 @@ export interface RouterData {
     urlSearchParams: URLSearchParams;
 }
 
-export async function router(req: Request, opts: RouterOptions): Promise<RouterData> {
+export async function router(
+    req: Request,
+    opts: RouterOptions = ROUTER_DEFAULTS
+): Promise<RouterData> {
     const url = new URL(req.url);
     const pathname = url.pathname;
     const urlSearchParams = url.searchParams;
