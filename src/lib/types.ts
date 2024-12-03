@@ -12,11 +12,11 @@ export type ExtResult = Response | ControlCode | void;
 
 export interface Metadata {
     title?: string;
-    base?: JSX.AllHTMLAttributes<HTMLBaseElement>;
-    meta?: JSX.AllHTMLAttributes<HTMLMetaElement>[];
-    links?: JSX.AllHTMLAttributes<HTMLLinkElement>[];
-    scripts?: JSX.AllHTMLAttributes<HTMLScriptElement>[];
-    styles?: JSX.AllHTMLAttributes<HTMLStyleElement>[];
+    base?: JSX.HTMLAttributes<HTMLBaseElement>;
+    meta?: JSX.MetaHTMLAttributes<HTMLMetaElement>[];
+    links?: JSX.HTMLAttributes<HTMLLinkElement>[];
+    scripts?: JSX.HTMLAttributes<HTMLScriptElement>[];
+    styles?: JSX.HTMLAttributes<HTMLStyleElement>[];
 }
 
 export interface BaseCtx<P = unknown> {
