@@ -26,7 +26,7 @@ export class Log {
         const cMethod = Colors.blue(req.method);
         const cStatus = statusColor(status);
         const path = new URL(req.url).pathname;
-        console.info(`${timestamp()} ${duration} ${cMethod} ${cStatus} ${path}`);
+        console.info(`${timestamp()} ${cMethod} ${cStatus} ${duration} ${path}`);
     }
 
     static info(code: InfoCode, msg?: string): void {
