@@ -34,13 +34,12 @@
  * @module
  */
 
-import { HEADER } from "@std/http/unstable-header";
 import { INFO_CODE, Log } from "../lib/log.ts";
 
 export interface ListenOptions {
     hostname: string;
     port: number;
-    handler: (req: Request, res: Response, isError: boolean) => Response | Promise<Response>;
+    handler: (req: Request, isError: boolean) => Response | Promise<Response>;
 }
 
 type Handler = Deno.ServeHandler<Deno.NetAddr>;
@@ -50,24 +49,22 @@ type ListenHandler = Deno.ServeTcpOptions["onListen"];
 export function listen(opts: ListenOptions): void {
     let request: Request;
     const memReq = (req: Request) => (request = req) && request;
-    const response = new Response();
-    let responseStartTime = 0;
+    let responseStartTime: number;
 
     const handler: Handler = async req => {
         responseStartTime = Date.now();
-        response.headers.set(HEADER.Date, new Date(responseStartTime).toUTCString());
         const IS_ERROR = <const>false;
-        const handlerResponse = await opts.handler(memReq(req), response, IS_ERROR);
+        const response = await opts.handler(memReq(req), IS_ERROR);
         Log.response(request, response.status, responseStartTime);
-        return handlerResponse;
+        return response;
     };
 
     const onError: ErrorHandler = async err => {
         console.error(err instanceof Error ? err.stack : err);
         const IS_ERROR = <const>true;
-        const handlerResponse = await opts.handler(request, response, IS_ERROR);
+        const response = await opts.handler(request, IS_ERROR);
         Log.response(request, response.status, responseStartTime);
-        return handlerResponse;
+        return response;
     };
 
     const onListen: ListenHandler = addr => {

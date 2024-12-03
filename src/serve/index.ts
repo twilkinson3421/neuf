@@ -41,15 +41,16 @@ interface LayoutInitObject {
     downstream: unknown;
 }
 
-const NO_CONTENT_RESPONSE = h.createStandardResponse(STATUS_CODE.NoContent);
-const METHOD_NOT_ALLOWED_RESPONSE = h.createStandardResponse(STATUS_CODE.MethodNotAllowed);
-const NOT_FOUND_RESPONSE = h.createStandardResponse(STATUS_CODE.NotFound);
-const ERROR_RESPONSE = h.createStandardResponse(STATUS_CODE.InternalServerError);
+const createNoContentResponse = () => h.createStandardResponse(STATUS_CODE.NoContent);
+const createMethodNotAllowedResponse = () => h.createStandardResponse(STATUS_CODE.MethodNotAllowed);
+const createNotFoundResponse = () => h.createStandardResponse(STATUS_CODE.NotFound);
+const createErrorResponse = () => h.createStandardResponse(STATUS_CODE.InternalServerError);
 
-export async function serve(req: Request, res: Response, opts: ServeOptions): Promise<Response> {
+export async function serve(req: Request, opts: ServeOptions): Promise<Response> {
+    const res = new Response();
     const pathname = new URL(req.url).pathname;
-    const serveNotFound = async () => await serve(req, res, { ...opts, isNotFound: true });
-    const serveError = async () => await serve(req, res, { ...opts, isError: true });
+    const serveNotFound = async () => await serve(req, { ...opts, isNotFound: true });
+    const serveError = async () => await serve(req, { ...opts, isError: true });
 
     const staticResponse = await serveDir(req, opts.staticOptions);
     if (h.shouldServeStatic(staticResponse, pathname)) return staticResponse;
@@ -64,14 +65,15 @@ export async function serve(req: Request, res: Response, opts: ServeOptions): Pr
             const handler = routeHandler[<keyof typeof routeHandler>req.method];
             if (!handler) break hasHandler;
             const ctx: Lib.RouteHandlerCtx = { ...baseCtx, urlParams, urlSearchParams };
-            return (await handler(ctx)) ?? NO_CONTENT_RESPONSE;
+            return (await handler(ctx)) ?? createNoContentResponse();
         }
         if (req.method === METHOD.Get && routerData.pages.default) break handleRouteHandler;
-        return METHOD_NOT_ALLOWED_RESPONSE;
+        return createMethodNotAllowedResponse();
     }
 
-    if ([METHOD.Get, METHOD.Head].every(m => m !== req.method)) return METHOD_NOT_ALLOWED_RESPONSE;
-    if (!PageClass) return opts.isError ? ERROR_RESPONSE : NOT_FOUND_RESPONSE;
+    const ALLOWED_METHODS = <const>[METHOD.Get, METHOD.Head];
+    if (ALLOWED_METHODS.every(m => m !== req.method)) return createMethodNotAllowedResponse();
+    if (!PageClass) return opts.isError ? createErrorResponse() : createNotFoundResponse();
 
     const pageClassCtx: Lib.PageClassCtx = baseCtx;
     const pageConfig = await PageClass.config?.(pageClassCtx);
