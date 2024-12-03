@@ -13,6 +13,7 @@ import { HEADER } from "@std/http/unstable-header";
 import { METHOD } from "@std/http/unstable-method";
 import { resolveMetadata } from "../lib/metadata.ts";
 import { serveDir, type ServeDirOptions } from "@std/http/file-server";
+import { SERVER_NAME } from "../dev/name.ts";
 import { STATUS_CODE } from "@std/http/status";
 import * as h from "./helpers.ts";
 import type { JSX, VNode } from "preact";
@@ -48,12 +49,17 @@ const createErrorResponse = () => h.createStandardResponse(STATUS_CODE.InternalS
 
 export async function serve(req: Request, opts: ServeOptions): Promise<Response> {
     const res = new Response();
+    res.headers.set(HEADER.Server, SERVER_NAME);
     const pathname = new URL(req.url).pathname;
     const serveNotFound = async () => await serve(req, { ...opts, isNotFound: true });
     const serveError = async () => await serve(req, { ...opts, isError: true });
 
     const staticResponse = await serveDir(req, opts.staticOptions);
-    if (h.shouldServeStatic(staticResponse, pathname)) return staticResponse;
+    if (h.shouldServeStatic(staticResponse, pathname)) {
+        staticResponse.headers.delete(HEADER.Server);
+        staticResponse.headers.set(HEADER.Server, SERVER_NAME);
+        return staticResponse;
+    }
 
     const routerData = await opts.router(req);
     const { urlParams, urlSearchParams } = routerData;

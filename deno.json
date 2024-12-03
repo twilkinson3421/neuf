@@ -1,7 +1,8 @@
 {
     "name": "@neuf/neuf",
-    "version": "0.9.27",
+    "version": "0.9.28",
     "license": "MIT",
+    "xRegistry": "jsr.io",
 
     "exports": {
         ".": "./mod.ts",
