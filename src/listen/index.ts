@@ -35,6 +35,7 @@
  */
 
 import { INFO_CODE, Log } from "../lib/log.ts";
+import { List } from "@exts/list";
 
 export interface ListenOptions {
     hostname: string;
@@ -46,24 +47,30 @@ type Handler = Deno.ServeHandler<Deno.NetAddr>;
 type ErrorHandler = Deno.ServeTcpOptions["onError"];
 type ListenHandler = Deno.ServeTcpOptions["onListen"];
 
+interface RequestStackEntry {
+    request: Request;
+    startTime: number;
+}
+
 export function listen(opts: ListenOptions): void {
-    let request: Request;
-    const memReq = (req: Request) => (request = req) && request;
-    let responseStartTime: number;
+    const requestStack: List<RequestStackEntry> = new List();
 
     const handler: Handler = async req => {
-        responseStartTime = Date.now();
+        const savedReq = requestStack.push({ request: req, startTime: Date.now() }).last!;
         const IS_ERROR = <const>false;
-        const response = await opts.handler(memReq(req), IS_ERROR);
-        Log.response(request, response.status, responseStartTime);
+        const response = await opts.handler(req, IS_ERROR);
+        Log.response(savedReq.value.request, response.status, savedReq.value.startTime);
+        savedReq.extractOffset(0);
         return response;
     };
 
     const onError: ErrorHandler = async err => {
+        const savedReq = requestStack.pop()?.value;
+        if (!savedReq) throw new Error(`Request stack is empty. This is a bug in the Neuf server.`);
         console.error(err instanceof Error ? err.stack : err);
         const IS_ERROR = <const>true;
-        const response = await opts.handler(request, IS_ERROR);
-        Log.response(request, response.status, responseStartTime);
+        const response = await opts.handler(savedReq.request, IS_ERROR);
+        Log.response(savedReq.request, response.status, savedReq.startTime);
         return response;
     };
 
